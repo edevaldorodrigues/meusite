@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="Edevaldo Sousa - Manutenção de computadores, instalação de sistemas, redes, impressoras e suporte técnico.">
+
+    <title>Edevaldo Sousa | Manutenção de Computadores</title>
+
+    <style>
+        :root {
+            --azul: #087ea4;
+            --azul-escuro: #075b78;
+            --roxo: #6d5dfc;
+            --fundo: #f3f8fb;
+            --branco: #ffffff;
+            --texto: #17313b;
+            --cinza: #607680;
+            --borda: #dce9ee;
+            --verde: #159957;
+            --sombra: 0 12px 35px rgba(20, 70, 90, 0.10);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #f4fbfd, #f5f3ff);
+            color: var(--texto);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: min(1120px, 92%);
+            margin: auto;
+        }
+
+        /* MENU */
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--borda);
+        }
+
+        .nav {
+            min-height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--azul-escuro);
+        }
+
+        .logo span {
+            color: var(--roxo);
+        }
+
+        nav {
+            display: flex;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            font-weight: 700;
+            color: #35545f;
+        }
+
+        nav a:hover {
+            color: var(--azul);
+        }
+
+        /* HERO */
+
+        .hero {
+            padding: 90px 0 70px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e4f6fb;
+            color: var(--azul-escuro);
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            font-size: clamp(2.3rem, 5vw, 4.5rem);
+            line-height: 1.05;
+            margin-bottom: 20px;
+        }
+
+        h1 span {
+            color: var(--azul);
+        }
+
+        .hero p {
+            font-size: 1.08rem;
+            color: var(--cinza);
+            max-width: 650px;
+            margin-bottom: 28px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 800;
+            border: 0;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--azul);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--azul-escuro);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: white;
+            border: 1px solid var(--borda);
+            color: var(--azul-escuro);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--sombra);
+        }
+
+        .hero-card {
+            background: var(--branco);
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: var(--sombra);
+            border: 1px solid var(--borda);
+        }
+
+        .hero-card h3 {
+            margin-bottom: 18px;
+        }
+
+        .check {
+            display: flex;
+            gap: 10px;
+            margin: 13px 0;
+            color: #3f5963;
+        }
+
+        .check b {
+            color: var(--verde);
+        }
+
+        /* SEÇÕES */
+
+        section {
+            padding: 75px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 42px;
+        }
+
+        .section-title h2 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+        }
+
+        .section-title p {
+            color: var(--cinza);
+        }
+
+        /* SERVIÇOS */
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid var(--borda);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(20,70,90,.06);
+            transition: .2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--sombra);
+        }
+
+        .icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .card h3 {
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            color: var(--cinza);
+        }
+
+        /* SOBRE */
+
+        .about {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .about-box {
+            background: white;
+            border: 1px solid var(--borda);
+            border-radius: 22px;
+            padding: 30px;
+        }
+
+        .about-box p {
+            color: var(--cinza);
+            margin-top: 12px;
+        }
+
+        /* AVALIAÇÕES */
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .review-card {
+            background: white;
+            border: 1px solid var(--borda);
+            border-radius: 20px;
+            padding: 22px;
+            box-shadow: 0 8px 25px rgba(20,70,90,.06);
+        }
+
+        .stars {
+            color: #f2ad00;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .problem {
+            font-size: .9rem;
+            font-weight: 800;
+            color: var(--azul-escuro);
+            margin-bottom: 10px;
+        }
+
+        .review-card p {
+            color: #536a73;
+            font-style: italic;
+        }
+
+        .author {
+            margin-top: 14px;
+            font-weight: 800;
+        }
+
+        .empty {
+            text-align: center;
+            color: var(--cinza);
+            grid-column: 1 / -1;
+            padding: 25px;
+        }
+
+        /* FORMULÁRIO */
+
+        .review-form {
+            max-width: 760px;
+            margin: 35px auto 0;
+            background: white;
+            border: 1px solid var(--borda);
+            border-radius: 22px;
+            padding: 28px;
+            box-shadow: var(--sombra);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .field {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #cfdfe5;
+            border-radius: 11px;
+            font: inherit;
+            background: white;
+            color: var(--texto);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .message {
+            margin-top: 13px;
+            font-weight: 700;
+        }
+
+        .message.success {
+            color: var(--verde);
+        }
+
+        .message.error {
+            color: #c0392b;
+        }
+
+        /* CONTATO */
+
+        .contact {
+            background: linear-gradient(135deg, #e9f8fc, #f0edff);
+            border: 1px solid var(--borda);
+            border-radius: 28px;
+            padding: 45px;
+            text-align: center;
+        }
+
+        .contact p {
+            color: var(--cinza);
+            margin: 10px auto 22px;
+            max-width: 650px;
+        }
+
+        .phone {
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: var(--azul-escuro);
+            margin-bottom: 20px;
+        }
+
+        /* RODAPÉ */
+
+        footer {
+            padding: 30px 0;
+            border-top: 1px solid var(--borda);
+            color: var(--cinza);
+            text-align: center;
+        }
+
+        /* WHATSAPP */
+
+        .whatsapp {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 999;
+            background: #25d366;
+            color: white;
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,.18);
+        }
+
+        /* CELULAR */
+
+        @media(max-width: 850px) {
+
+            .hero-grid,
+            .about {
+                grid-template-columns: 1fr;
+            }
+
+            .services,
+            .reviews-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media(max-width: 600px) {
+
+            nav {
+                display: none;
+            }
+
+            .hero {
+                padding-top: 55px;
+            }
+
+            .services,
+            .reviews-grid,
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="container nav">
+
+        <a class="logo" href="#inicio">
+            Edevaldo <span>Sousa</span>
+        </a>
+
+        <nav>
+            <a href="#inicio">Início</a>
+            <a href="#servicos">Serviços</a>
+            <a href="#sobre">Sobre</a>
+            <a href="#avaliacoes">Avaliações</a>
+            <a href="#contato">Contato</a>
+        </nav>
+
+    </div>
+</header>
+
+<main>
+
+<!-- INÍCIO -->
+
+<section class="hero" id="inicio">
+
+    <div class="container hero-grid">
+
+        <div>
+
+            <span class="badge">
+                💻 Suporte técnico profissional
+            </span>
+
+            <h1>
+                Seu computador funcionando
+                <span>do jeito certo.</span>
+            </h1>
+
+            <p>
+                Manutenção de computadores, instalação de sistemas,
+                otimização, redes, impressoras, backup e suporte técnico.
+            </p>
+
+            <div class="buttons">
+
+                <a
+                    class="btn btn-primary"
+                    href="https://wa.me/5586994321692?text=Olá%20Edevaldo,%20gostaria%20de%20solicitar%20um%20serviço."
+                    target="_blank"
+                >
+                    📱 Chamar no WhatsApp
+                </a>
+
+                <a class="btn btn-secondary" href="#servicos">
+                    Ver serviços
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="hero-card">
+
+            <h3>Por que contratar meu serviço?</h3>
+
+            <div class="check">
+                <b>✓</b>
+                <span>Atendimento personalizado</span>
+            </div>
+
+            <div class="check">
+                <b>✓</b>
+                <span>Diagnóstico e manutenção</span>
+            </div>
+
+            <div class="check">
+                <b>✓</b>
+                <span>Instalação e configuração de sistemas</span>
+            </div>
+
+            <div class="check">
+                <b>✓</b>
+                <span>Otimização de desempenho</span>
+            </div>
+
+            <div class="check">
+                <b>✓</b>
+                <span>Suporte para computadores e periféricos</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- SERVIÇOS -->
+
+<section id="servicos">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <h2>Serviços</h2>
+
+            <p>
+                Soluções para deixar seus equipamentos funcionando melhor.
+            </p>
+
+        </div>
+
+        <div class="services">
+
+            <article class="card">
+                <div class="icon">🛠️</div>
+                <h3>Manutenção</h3>
+                <p>
+                    Diagnóstico, limpeza, manutenção preventiva
+                    e correção de problemas.
+                </p>
+            </article>
+
+            <article class="card">
+                <div class="icon">💿</div>
+                <h3>Instalação de sistemas</h3>
+                <p>
+                    Instalação e configuração de sistemas,
+                    drivers e programas necessários.
+                </p>
+            </article>
+
+            <article class="card">
+                <div class="icon">⚡</div>
+                <h3>Otimização</h3>
+                <p>
+                    Melhoria de desempenho, inicialização,
+                    armazenamento e configurações.
+                </p>
+            </article>
+
+            <article class="card">
+                <div class="icon">💾</div>
+                <h3>Backup</h3>
+                <p>
+                    Organização e cópia de segurança dos
+                    seus arquivos importantes.
+                </p>
+            </article>
+
+            <article class="card">
+                <div class="icon">🖨️</div>
+                <h3>Impressoras</h3>
+                <p>
+                    Instalação, configuração e resolução
+                    de problemas de impressão.
+                </p>
+            </article>
+
+            <article class="card">
+                <div class="icon">🌐</div>
+                <h3>Redes</h3>
+                <p>
+                    Configuração de rede, Wi-Fi,
+                    compartilhamento e conectividade.
+                </p>
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- SOBRE -->
+
+<section id="sobre">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <h2>Sobre o serviço</h2>
+
+            <p>
+                Atendimento focado em resolver o problema
+                de forma clara e prática.
+            </p>
+
+        </div>
+
+        <div class="about">
+
+            <div class="about-box">
+
+                <h3>Edevaldo Sousa</h3>
+
+                <p>
+                    Trabalho com manutenção e suporte de computadores,
+                    instalação de sistemas e configuração de equipamentos.
+                    O objetivo é ajudar você a voltar a utilizar seu
+                    computador com segurança e bom desempenho.
+                </p>
+
+            </div>
+
+            <div class="about-box">
+
+                <h3>Atendimento</h3>
+
+                <p>
+                    Entre em contato pelo WhatsApp para explicar
+                    o problema do seu equipamento e receber informações
+                    sobre o serviço.
+                </p>
+
+                <br>
+
+                <a
+                    class="btn btn-primary"
+                    href="https://wa.me/5586994321692"
+                    target="_blank"
+                >
+                    Falar pelo WhatsApp
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- AVALIAÇÕES -->
+
+<section id="avaliacoes">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <h2>Problemas resolvidos e avaliações</h2>
+
+            <p>
+                Veja os comentários publicados pelos clientes.
+            </p>
+
+        </div>
+
+
+        <div id="reviewsList" class="reviews-grid">
+
+            <div class="empty">
+                Carregando avaliações...
+            </div>
+
+        </div>
+
+
+        <!-- FORMULÁRIO -->
+
+        <form id="reviewForm" class="review-form">
+
+            <h3>
+                Conte como foi seu atendimento
+            </h3>
+
+            <p style="color:#607680;margin:6px 0 22px">
+
+                Sua avaliação será enviada para aprovação
+                antes de aparecer publicamente.
+
+            </p>
+
+
+            <div class="form-grid">
+
+                <div class="field">
+
+                    <label for="reviewName">
+                        Seu nome
+                    </label>
+
+                    <input
+                        id="reviewName"
+                        maxlength="60"
+                        required
+                        placeholder="Ex.: João"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="reviewProblem">
+                        Problema resolvido
+                    </label>
+
+                    <input
+                        id="reviewProblem"
+                        maxlength="100"
+                        required
+                        placeholder="Ex.: Computador lento"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="reviewRating">
+                    Nota
+                </label>
+
+                <select id="reviewRating" required>
+
+                    <option value="5">
+                        ★★★★★ - 5
+                    </option>
+
+                    <option value="4">
+                        ★★★★☆ - 4
+                    </option>
+
+                    <option value="3">
+                        ★★★☆☆ - 3
+                    </option>
+
+                    <option value="2">
+                        ★★☆☆☆ - 2
+                    </option>
+
+                    <option value="1">
+                        ★☆☆☆☆ - 1
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="reviewText">
+                    Comentário
+                </label>
+
+                <textarea
+                    id="reviewText"
+                    maxlength="350"
+                    required
+                    placeholder="Conte como foi o atendimento..."
+                ></textarea>
+
+            </div>
+
+
+            <button
+                class="btn btn-primary"
+                type="submit"
+            >
+                Enviar avaliação
+            </button>
+
+
+            <div
+                id="reviewMessage"
+                class="message"
+            ></div>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<!-- CONTATO -->
+
+<section id="contato">
+
+    <div class="container">
+
+        <div class="contact">
+
+            <h2>
+                Precisa de ajuda com seu computador?
+            </h2>
+
+            <p>
+                Entre em contato e explique o problema.
+                Vamos conversar sobre a melhor solução
+                para seu equipamento.
+            </p>
+
+            <div class="phone">
+                (86) 99432-1692
+            </div>
+
+            <a
+                class="btn btn-primary"
+                href="https://wa.me/5586994321692?text=Olá%20Edevaldo,%20preciso%20de%20ajuda%20com%20meu%20computador."
+                target="_blank"
+            >
+                📲 Solicitar atendimento
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- RODAPÉ -->
+
+<footer>
+
+    <div class="container">
+
+        © <span id="year"></span>
+        Edevaldo Sousa —
+        Manutenção de Computadores e Sistemas.
+
+    </div>
+
+</footer>
+
+
+<!-- BOTÃO WHATSAPP -->
+
+<a
+    class="whatsapp"
+    href="https://wa.me/5586994321692"
+    target="_blank"
+    aria-label="WhatsApp"
+>
+    ☏
+</a>
+
+
+<!-- ==========================================================
+     SUPABASE
+     ========================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+/*
+============================================================
+CONFIGURAÇÃO DO SUPABASE
+============================================================
+
+VOCÊ PRECISA ALTERAR SOMENTE ESTAS DUAS LINHAS:
+
+1 - SUPABASE_URL
+2 - SUPABASE_KEY
+
+NÃO COLOQUE A SECRET KEY AQUI.
+USE SOMENTE A PUBLISHABLE KEY.
+============================================================
+*/
+
+
+const SUPABASE_URL = "https://hcvvaltyawjmnvgeytvs.supabase.co";
+const SUPABASE_KEY = "sb_publishable_Eqf4WDixHYpJYmsagw4uEQ_AozxKxsH";
+
+let supabaseClient = null;
+
+
+try {
+
+    if (
+        SUPABASE_URL.startsWith("http") &&
+        !SUPABASE_URL.includes("COLE_AQUI") &&
+        !SUPABASE_KEY.includes("COLE_AQUI")
+    ) {
+
+        supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+        console.log("Supabase conectado!");
+
+    } else {
+
+        console.warn(
+            "Configure SUPABASE_URL e SUPABASE_KEY."
+        );
+
+    }
+
+} catch (erro) {
+
+    console.error(
+        "Erro ao conectar ao Supabase:",
+        erro
+    );
+
+}
+
+
+/* ANO DO RODAPÉ */
+
+document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+
+
+/* PROTEÇÃO PARA TEXTOS DO BANCO */
+
+function escapar(texto) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        texto || "";
+
+    return div.innerHTML;
+}
+
+
+
+/* ==========================================================
+   CARREGAR AVALIAÇÕES
+   ========================================================== */
+
+async function carregarAvaliacoes() {
+
+    const lista =
+        document.getElementById("reviewsList");
+
+
+    if (!supabaseClient) {
+
+        lista.innerHTML = `
+            <div class="empty">
+
+                Configure primeiro a URL
+                e a Publishable key do Supabase.
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const resultado =
+        await supabaseClient
+
+            .from("avaliacoes")
+
+            .select(
+                "id,nome,problema,comentario,nota,created_at"
+            )
+
+            .eq(
+                "aprovado",
+                true
+            )
+
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    const data =
+        resultado.data;
+
+    const error =
+        resultado.error;
+
+
+    if (error) {
+
+        console.error(
+            "Erro ao carregar avaliações:",
+            error
+        );
+
+        lista.innerHTML = `
+            <div class="empty">
+
+                Não foi possível carregar
+                as avaliações.
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+        lista.innerHTML = `
+            <div class="empty">
+
+                Ainda não há avaliações publicadas.
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    lista.innerHTML =
+        data.map(
+            function(avaliacao) {
+
+                let nota =
+                    Number(avaliacao.nota);
+
+
+                if (nota < 1)
+                    nota = 1;
+
+                if (nota > 5)
+                    nota = 5;
+
+
+                return `
+
+                    <article class="review-card">
+
+                        <div class="stars">
+
+                            ${
+                                "★".repeat(nota)
+                            }
+
+                            ${
+                                "☆".repeat(5 - nota)
+                            }
+
+                        </div>
+
+
+                        <div class="problem">
+
+                            Problema resolvido:
+                            ${
+                                escapar(
+                                    avaliacao.problema
+                                )
+                            }
+
+                        </div>
+
+
+                        <p>
+
+                            "${
+                                escapar(
+                                    avaliacao.comentario
+                                )
+                            }"
+
+                        </p>
+
+
+                        <div class="author">
+
+                            —
+                            ${
+                                escapar(
+                                    avaliacao.nome
+                                )
+                            }
+
+                        </div>
+
+                    </article>
+
+                `;
+
+            }
+        ).join("");
+
+}
+
+
+
+/* ==========================================================
+   ENVIAR AVALIAÇÃO
+   ========================================================== */
+
+document
+    .getElementById("reviewForm")
+    .addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const mensagem =
+                document.getElementById(
+                    "reviewMessage"
+                );
+
+
+            if (!supabaseClient) {
+
+                mensagem.className =
+                    "message error";
+
+                mensagem.textContent =
+                    "O banco ainda não foi configurado.";
+
+                return;
+            }
+
+
+            const nome =
+                document
+                    .getElementById("reviewName")
+                    .value
+                    .trim();
+
+
+            const problema =
+                document
+                    .getElementById("reviewProblem")
+                    .value
+                    .trim();
+
+
+            const comentario =
+                document
+                    .getElementById("reviewText")
+                    .value
+                    .trim();
+
+
+            const nota =
+                Number(
+                    document
+                        .getElementById("reviewRating")
+                        .value
+                );
+
+
+            if (
+                nome.length < 2 ||
+                problema.length < 2 ||
+                comentario.length < 5
+            ) {
+
+                mensagem.className =
+                    "message error";
+
+                mensagem.textContent =
+                    "Preencha os campos corretamente.";
+
+                return;
+            }
+
+
+            mensagem.className =
+                "message";
+
+
+            mensagem.textContent =
+                "Enviando avaliação...";
+
+
+            const resultado =
+                await supabaseClient
+
+                    .from("avaliacoes")
+
+                    .insert({
+
+                        nome:
+                            nome,
+
+                        problema:
+                            problema,
+
+                        comentario:
+                            comentario,
+
+                        nota:
+                            nota,
+
+                        aprovado:
+                            false
+
+                    });
+
+
+            if (resultado.error) {
+
+                console.error(
+                    resultado.error
+                );
+
+                mensagem.className =
+                    "message error";
+
+                mensagem.textContent =
+                    "Não foi possível enviar a avaliação.";
+
+                return;
+            }
+
+
+            mensagem.className =
+                "message success";
+
+
+            mensagem.textContent =
+                "Avaliação enviada com sucesso! Ela será publicada após aprovação.";
+
+
+            document
+                .getElementById("reviewForm")
+                .reset();
+
+        }
+    );
+
+
+
+/* CARREGAR AVALIAÇÕES AO ABRIR O SITE */
+
+carregarAvaliacoes();
+
+</script>
+
+</body>
+</html>
