@@ -936,194 +936,506 @@
 
 <script>
 
-const SUPABASE_URL = "https://hcvvaltyawjmngeytvs.supabase.co";
+/*
+============================================================
+CONFIGURAÇÃO DO SUPABASE
+============================================================
+
+VOCÊ PRECISA ALTERAR SOMENTE ESTAS DUAS LINHAS:
+
+1 - SUPABASE_URL
+2 - SUPABASE_KEY
+
+NÃO COLOQUE A SECRET KEY AQUI.
+USE SOMENTE A PUBLISHABLE KEY.
+============================================================
+*/
+
+
+const SUPABASE_URL = "https://hcvvaltyawjmnvgeytvs.supabase.co";
 const SUPABASE_KEY = "sb_publishable_Eqf4WDixHYpJYmsagw4uEQ_AozxKxsH";
 
 let supabaseClient = null;
 
+
 try {
-    if (window.supabase && SUPABASE_URL && SUPABASE_KEY) {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    if (
+        SUPABASE_URL.startsWith("http") &&
+        !SUPABASE_URL.includes("COLE_AQUI") &&
+        !SUPABASE_KEY.includes("COLE_AQUI")
+    ) {
+
+        supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
         console.log("Supabase conectado!");
+
+    } else {
+
+        console.warn(
+            "Configure SUPABASE_URL e SUPABASE_KEY."
+        );
+
     }
+
 } catch (erro) {
-    console.error("Erro ao conectar ao Supabase:", erro);
+
+    console.error(
+        "Erro ao conectar ao Supabase:",
+        erro
+    );
+
 }
 
-const yearElement = document.getElementById("year");
-if (yearElement) yearElement.textContent = new Date().getFullYear();
+
+/* ANO DO RODAPÉ */
+
+document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+
+
+/* ==========================================================
+   CONTADOR GLOBAL DE VISITAS
+   Uma visita é registrada uma vez por sessão do navegador.
+   O total fica salvo no Supabase.
+   ========================================================== */
 
 function mostrarContador(total) {
-    const contador = document.getElementById("visitCount");
+
+    const contador =
+        document.getElementById("visitCount");
+
     if (!contador) return;
+
     const numero = Number(total);
-    contador.textContent = Number.isFinite(numero) ? numero.toLocaleString("pt-BR") : "—";
+
+    if (Number.isFinite(numero)) {
+        contador.textContent =
+            numero.toLocaleString("pt-BR");
+    } else {
+        contador.textContent = "—";
+    }
 }
 
-function carregarContadorVisitas() {
-    const contador = document.getElementById("visitCount");
-    if (!contador || !supabaseClient) {
-        if (contador) contador.textContent = "—";
+
+async function carregarContadorVisitas() {
+
+    const contador =
+        document.getElementById("visitCount");
+
+    if (!contador) return;
+
+    if (!supabaseClient) {
+        contador.textContent = "—";
         return;
     }
 
-    let jaRegistrada = false;
     try {
-        jaRegistrada = sessionStorage.getItem("edevaldo_visita_registrada") === "1";
-    } catch (e) {}
 
-    if (!jaRegistrada) {
-        supabaseClient.rpc("registrar_visita")
-            .then(function(resultado) {
-                if (!resultado.error) {
-                    try { sessionStorage.setItem("edevaldo_visita_registrada", "1"); } catch (e) {}
-                    mostrarContador(resultado.data);
-                    return;
-                }
+        const jaRegistrada =
+            sessionStorage.getItem(
+                "edevaldo_visita_registrada"
+            ) === "1";
 
-                console.error("Erro ao registrar visita:", resultado.error);
-                consultarContador();
-            })
-            .catch(function(erro) {
-                console.error("Erro ao registrar visita:", erro);
-                consultarContador();
-            });
-    } else {
-        consultarContador();
-    }
 
-    function consultarContador() {
-        supabaseClient.from("contador_visitas")
-            .select("total")
-            .eq("id", 1)
-            .single()
-            .then(function(consulta) {
-                if (consulta.error) {
-                    console.error("Erro ao consultar contador:", consulta.error);
-                    contador.textContent = "—";
-                    return;
-                }
-                mostrarContador(consulta.data.total);
-            })
-            .catch(function(erro) {
-                console.error("Erro ao consultar contador:", erro);
-                contador.textContent = "—";
-            });
+        if (!jaRegistrada) {
+
+            const resultado =
+                await supabaseClient.rpc(
+                    "registrar_visita"
+                );
+
+
+            if (!resultado.error) {
+
+                sessionStorage.setItem(
+                    "edevaldo_visita_registrada",
+                    "1"
+                );
+
+                mostrarContador(
+                    resultado.data
+                );
+
+                return;
+            }
+
+            console.error(
+                "Erro ao registrar visita:",
+                resultado.error
+            );
+        }
+
+
+        const consulta =
+            await supabaseClient
+                .from("contador_visitas")
+                .select("total")
+                .eq("id", 1)
+                .single();
+
+
+        if (consulta.error) {
+
+            console.error(
+                "Erro ao consultar contador:",
+                consulta.error
+            );
+
+            contador.textContent = "—";
+
+            return;
+        }
+
+
+        mostrarContador(
+            consulta.data.total
+        );
+
+    } catch (erro) {
+
+        console.error(
+            "Erro no contador de visitas:",
+            erro
+        );
+
+        contador.textContent = "—";
     }
 }
 
+
+
+/* PROTEÇÃO PARA TEXTOS DO BANCO */
+
 function escapar(texto) {
-    const div = document.createElement("div");
-    div.textContent = texto || "";
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        texto || "";
+
     return div.innerHTML;
 }
 
-function carregarAvaliacoes() {
-    const lista = document.getElementById("reviewsList");
-    if (!lista) return;
+
+
+/* ==========================================================
+   CARREGAR AVALIAÇÕES
+   ========================================================== */
+
+async function carregarAvaliacoes() {
+
+    const lista =
+        document.getElementById("reviewsList");
+
 
     if (!supabaseClient) {
-        lista.innerHTML = '<div class="empty">Configure primeiro o Supabase.</div>';
+
+        lista.innerHTML = `
+            <div class="empty">
+
+                Configure primeiro a URL
+                e a Publishable key do Supabase.
+
+            </div>
+        `;
+
         return;
     }
 
-    supabaseClient.from("avaliacoes")
-        .select("id,nome,problema,comentario,nota,created_at")
-        .eq("aprovado", true)
-        .order("created_at", { ascending: false })
-        .then(function(resultado) {
-            if (resultado.error) {
-                console.error("Erro ao carregar avaliações:", resultado.error);
-                lista.innerHTML = '<div class="empty">Não foi possível carregar as avaliações.</div>';
-                return;
-            }
 
-            const data = resultado.data || [];
-            if (!data.length) {
-                lista.innerHTML = '<div class="empty">Ainda não há avaliações publicadas.</div>';
-                return;
-            }
+    const resultado =
+        await supabaseClient
 
-            lista.innerHTML = data.map(function(avaliacao) {
-                let nota = Number(avaliacao.nota);
-                if (nota < 1) nota = 1;
-                if (nota > 5) nota = 5;
+            .from("avaliacoes")
+
+            .select(
+                "id,nome,problema,comentario,nota,created_at"
+            )
+
+            .eq(
+                "aprovado",
+                true
+            )
+
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    const data =
+        resultado.data;
+
+    const error =
+        resultado.error;
+
+
+    if (error) {
+
+        console.error(
+            "Erro ao carregar avaliações:",
+            error
+        );
+
+        lista.innerHTML = `
+            <div class="empty">
+
+                Não foi possível carregar
+                as avaliações.
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+        lista.innerHTML = `
+            <div class="empty">
+
+                Ainda não há avaliações publicadas.
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    lista.innerHTML =
+        data.map(
+            function(avaliacao) {
+
+                let nota =
+                    Number(avaliacao.nota);
+
+
+                if (nota < 1)
+                    nota = 1;
+
+                if (nota > 5)
+                    nota = 5;
+
 
                 return `
+
                     <article class="review-card">
-                        <div class="stars">${"★".repeat(nota)}${"☆".repeat(5 - nota)}</div>
-                        <div class="problem">Problema resolvido: ${escapar(avaliacao.problema)}</div>
-                        <p>"${escapar(avaliacao.comentario)}"</p>
-                        <div class="author">— ${escapar(avaliacao.nome)}</div>
+
+                        <div class="stars">
+
+                            ${
+                                "★".repeat(nota)
+                            }
+
+                            ${
+                                "☆".repeat(5 - nota)
+                            }
+
+                        </div>
+
+
+                        <div class="problem">
+
+                            Problema resolvido:
+                            ${
+                                escapar(
+                                    avaliacao.problema
+                                )
+                            }
+
+                        </div>
+
+
+                        <p>
+
+                            "${
+                                escapar(
+                                    avaliacao.comentario
+                                )
+                            }"
+
+                        </p>
+
+
+                        <div class="author">
+
+                            —
+                            ${
+                                escapar(
+                                    avaliacao.nome
+                                )
+                            }
+
+                        </div>
+
                     </article>
+
                 `;
-            }).join("");
-        })
-        .catch(function(erro) {
-            console.error("Erro ao carregar avaliações:", erro);
-            lista.innerHTML = '<div class="empty">Não foi possível carregar as avaliações.</div>';
-        });
+
+            }
+        ).join("");
+
 }
 
-const reviewForm = document.getElementById("reviewForm");
-if (reviewForm) {
-    reviewForm.addEventListener("submit", function(event) {
-        event.preventDefault();
 
-        const mensagem = document.getElementById("reviewMessage");
-        if (!mensagem) return;
 
-        if (!supabaseClient) {
-            mensagem.className = "message error";
-            mensagem.textContent = "O banco ainda não foi configurado.";
-            return;
+/* ==========================================================
+   ENVIAR AVALIAÇÃO
+   ========================================================== */
+
+document
+    .getElementById("reviewForm")
+    .addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const mensagem =
+                document.getElementById(
+                    "reviewMessage"
+                );
+
+
+            if (!supabaseClient) {
+
+                mensagem.className =
+                    "message error";
+
+                mensagem.textContent =
+                    "O banco ainda não foi configurado.";
+
+                return;
+            }
+
+
+            const nome =
+                document
+                    .getElementById("reviewName")
+                    .value
+                    .trim();
+
+
+            const problema =
+                document
+                    .getElementById("reviewProblem")
+                    .value
+                    .trim();
+
+
+            const comentario =
+                document
+                    .getElementById("reviewText")
+                    .value
+                    .trim();
+
+
+            const nota =
+                Number(
+                    document
+                        .getElementById("reviewRating")
+                        .value
+                );
+
+
+            if (
+                nome.length < 2 ||
+                problema.length < 2 ||
+                comentario.length < 5
+            ) {
+
+                mensagem.className =
+                    "message error";
+
+                mensagem.textContent =
+                    "Preencha os campos corretamente.";
+
+                return;
+            }
+
+
+            mensagem.className =
+                "message";
+
+
+            mensagem.textContent =
+                "Enviando avaliação...";
+
+
+            const resultado =
+                await supabaseClient
+
+                    .from("avaliacoes")
+
+                    .insert({
+
+                        nome:
+                            nome,
+
+                        problema:
+                            problema,
+
+                        comentario:
+                            comentario,
+
+                        nota:
+                            nota,
+
+                        aprovado:
+                            false
+
+                    });
+
+
+            if (resultado.error) {
+
+                console.error(
+                    resultado.error
+                );
+
+                mensagem.className =
+                    "message error";
+
+                mensagem.textContent =
+                    "Não foi possível enviar a avaliação.";
+
+                return;
+            }
+
+
+            mensagem.className =
+                "message success";
+
+
+            mensagem.textContent =
+                "Avaliação enviada com sucesso! Ela será publicada após aprovação.";
+
+
+            document
+                .getElementById("reviewForm")
+                .reset();
+
         }
+    );
 
-        const nome = document.getElementById("reviewName").value.trim();
-        const problema = document.getElementById("reviewProblem").value.trim();
-        const comentario = document.getElementById("reviewText").value.trim();
-        const nota = Number(document.getElementById("reviewRating").value);
 
-        if (nome.length < 2 || problema.length < 2 || comentario.length < 5) {
-            mensagem.className = "message error";
-            mensagem.textContent = "Preencha os campos corretamente.";
-            return;
-        }
 
-        mensagem.className = "message";
-        mensagem.textContent = "Enviando avaliação...";
-
-        supabaseClient.from("avaliacoes")
-            .insert({
-                nome: nome,
-                problema: problema,
-                comentario: comentario,
-                nota: nota,
-                aprovado: false
-            })
-            .then(function(resultado) {
-                if (resultado.error) {
-                    console.error("Erro ao enviar avaliação:", resultado.error);
-                    mensagem.className = "message error";
-                    mensagem.textContent = "Não foi possível enviar a avaliação.";
-                    return;
-                }
-
-                mensagem.className = "message success";
-                mensagem.textContent = "Avaliação enviada com sucesso! Ela será publicada após aprovação.";
-                reviewForm.reset();
-            })
-            .catch(function(erro) {
-                console.error("Erro ao enviar avaliação:", erro);
-                mensagem.className = "message error";
-                mensagem.textContent = "Não foi possível enviar a avaliação.";
-            });
-    });
-}
+/* CARREGAR AVALIAÇÕES E CONTADOR AO ABRIR O SITE */
 
 carregarAvaliacoes();
 carregarContadorVisitas();
-
 
 </script>
 
