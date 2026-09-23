@@ -408,6 +408,17 @@
             text-align: center;
         }
 
+        /* CONTADOR DE VISITAS */
+
+        .visit-counter {
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+
+        .visit-counter strong {
+            color: var(--azul-escuro);
+        }
+
         /* WHATSAPP */
 
         .whatsapp {
@@ -941,7 +952,7 @@ USE SOMENTE A PUBLISHABLE KEY.
 */
 
 
-const SUPABASE_URL = "https://hcvvaltyawjmnvgeytvs.supabase.co";
+const SUPABASE_URL = "https://hcvvaltyawjmngeytvs.supabase.co";
 const SUPABASE_KEY = "sb_publishable_Eqf4WDixHYpJYmsagw4uEQ_AozxKxsH";
 
 let supabaseClient = null;
@@ -985,6 +996,117 @@ try {
 
 document.getElementById("year").textContent =
     new Date().getFullYear();
+
+
+
+/* ==========================================================
+   CONTADOR GLOBAL DE VISITAS
+   Uma visita é registrada uma vez por sessão do navegador.
+   O total fica salvo no Supabase.
+   ========================================================== */
+
+function mostrarContador(total) {
+
+    const contador =
+        document.getElementById("visitCount");
+
+    if (!contador) return;
+
+    const numero = Number(total);
+
+    if (Number.isFinite(numero)) {
+        contador.textContent =
+            numero.toLocaleString("pt-BR");
+    } else {
+        contador.textContent = "—";
+    }
+}
+
+
+async function carregarContadorVisitas() {
+
+    const contador =
+        document.getElementById("visitCount");
+
+    if (!contador) return;
+
+    if (!supabaseClient) {
+        contador.textContent = "—";
+        return;
+    }
+
+    try {
+
+        const jaRegistrada =
+            sessionStorage.getItem(
+                "edevaldo_visita_registrada"
+            ) === "1";
+
+
+        if (!jaRegistrada) {
+
+            const resultado =
+                await supabaseClient.rpc(
+                    "registrar_visita"
+                );
+
+
+            if (!resultado.error) {
+
+                sessionStorage.setItem(
+                    "edevaldo_visita_registrada",
+                    "1"
+                );
+
+                mostrarContador(
+                    resultado.data
+                );
+
+                return;
+            }
+
+            console.error(
+                "Erro ao registrar visita:",
+                resultado.error
+            );
+        }
+
+
+        const consulta =
+            await supabaseClient
+                .from("contador_visitas")
+                .select("total")
+                .eq("id", 1)
+                .single();
+
+
+        if (consulta.error) {
+
+            console.error(
+                "Erro ao consultar contador:",
+                consulta.error
+            );
+
+            contador.textContent = "—";
+
+            return;
+        }
+
+
+        mostrarContador(
+            consulta.data.total
+        );
+
+    } catch (erro) {
+
+        console.error(
+            "Erro no contador de visitas:",
+            erro
+        );
+
+        contador.textContent = "—";
+    }
+}
 
 
 
@@ -1310,9 +1432,10 @@ document
 
 
 
-/* CARREGAR AVALIAÇÕES AO ABRIR O SITE */
+/* CARREGAR AVALIAÇÕES E CONTADOR AO ABRIR O SITE */
 
 carregarAvaliacoes();
+carregarContadorVisitas();
 
 </script>
 
